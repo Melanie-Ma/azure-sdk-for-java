@@ -2,9 +2,8 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$PackageName,
-    [string]$ServiceDirectory,
     [string]$ReleaseDate, # Pass Date in the form MM/dd/yyyy"
     [string]$BuildType # For Java
 )
@@ -27,9 +26,7 @@ function Get-ReleaseDay($baseDate)
 
 $ErrorPreference = 'Stop'
 
-$packageProperties = Get-PkgProperties -PackageName $PackageName -ServiceDirectory $serviceDirectory
-
-Write-Host "Source directory [ $serviceDirectory ]"
+$packageProperties = Get-PkgProperties -PackageName $PackageName
 
 if (!$ReleaseDate)
 {
@@ -82,8 +79,8 @@ if ($null -eq $newVersionParsed)
 
 if (Test-Path "Function:SetPackageVersion")
 {
-    SetPackageVersion -PackageName $packageProperties.Name -Version $newVersion -ServiceDirectory $serviceDirectory -ReleaseDate $releaseDateString `
-    -BuildType $BuildType -GroupId $packageProperties.Group
+    SetPackageVersion -PackageName $packageProperties.Name -Version $newVersion -ServiceDirectory $packageProperties.ServiceDirectory `
+     -ReleaseDate $releaseDateString -BuildType $BuildType -GroupId $packageProperties.Group
 }
 else
 {
@@ -98,7 +95,7 @@ else
 -packageName $packageProperties.Name `
 -version $newVersion `
 -plannedDate $releaseDateString `
--packageRepoPath $packageProperties.serviceDirectory
+-packageRepoPath $packageProperties.ServiceDirectory
 
 git diff -s --exit-code $packageProperties.DirectoryPath
 if ($LASTEXITCODE -ne 0)
