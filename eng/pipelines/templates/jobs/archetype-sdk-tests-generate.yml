@@ -22,6 +22,10 @@ jobs:
   steps:
     - checkout: none
 
+    - pwsh: |
+        git --version
+      displayName: git test
+
     - ${{ each config in parameters.MatrixConfigs }}:
       - ${{ if eq(config.GenerateVMJobs, 'true') }}:
         - task: Powershell@2
