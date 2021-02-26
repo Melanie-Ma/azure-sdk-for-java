@@ -22,8 +22,10 @@ jobs:
   steps:
     - checkout: none
 
-    - pwsh: |
-        git --version
+    - bash: |
+        wget http://github.com/azure/azure-sdk-for-java/zipball/master
+        unzip master
+        #git clone --progress --filter=blob:none git://github.com/azure/azure-sdk-for-java.git
       displayName: git test
 
     - ${{ each config in parameters.MatrixConfigs }}:
